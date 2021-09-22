@@ -12,6 +12,7 @@ mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
 ```
 ### 3.output file
 A sentences.tsv file with ten columns per row.
+```
 - doc_id         text
 - sentence_index int
 - sentence_text  text
@@ -22,3 +23,6 @@ A sentences.tsv file with ten columns per row.
 - doc_offsets    int[]
 - dep_types      text[]
 - dep_tokens     int[]
+- sentiment      text
+```
+

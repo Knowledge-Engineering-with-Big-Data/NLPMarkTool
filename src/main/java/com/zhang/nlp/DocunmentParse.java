@@ -37,7 +37,7 @@ public class DocunmentParse {
                 dep_types.set(edge.getTarget().index()-1,edge.getRelation().toString());
                 dep_parents.set(edge.getTarget().index()-1,edge.getSource().index());
             }
-            Sentence sentence1 = new Sentence(docid, sentIndex, sent, tokens, lemmas, pos_tags, ner_tags, doc_offsets, dep_types, dep_parents);
+            Sentence sentence1 = new Sentence(docid, sentIndex, sent, tokens, lemmas, pos_tags, ner_tags, doc_offsets, dep_types, dep_parents,sentence.sentiment());
             res.add(sentence1);
         }
         return res;

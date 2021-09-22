@@ -13,8 +13,9 @@ public class Sentence {
     private List<Integer> doc_offsets;
     private List<String> dep_types;
     private List<Integer> dep_tokens;
+    private String sentiment;
 
-    public Sentence(String docid, Integer senIndex, String sentTxt, List<String> tokens, List<String> lemmas, List<String> pos_tags, List<String> ner_tags, List<Integer> doc_offsets, List<String> dep_types, List<Integer> dep_tokens) {
+    public Sentence(String docid, Integer senIndex, String sentTxt, List<String> tokens, List<String> lemmas, List<String> pos_tags, List<String> ner_tags, List<Integer> doc_offsets, List<String> dep_types, List<Integer> dep_tokens, String sentiment) {
         this.docid = docid;
         this.senIndex = senIndex;
         this.sentTxt = sentTxt;
@@ -25,6 +26,8 @@ public class Sentence {
         this.doc_offsets = doc_offsets;
         this.dep_types = dep_types;
         this.dep_tokens = dep_tokens;
+        this.sentiment = sentiment;
+
     }
 
     public String getDocid() {
@@ -66,5 +69,9 @@ public class Sentence {
     public List<Integer> getDep_tokens() {
         return dep_tokens;
     }
+    public String getSentiment() {
+        return sentiment;
+    }
+
 
 }

@@ -32,7 +32,8 @@ public class TsvParser {
                     Utils.formatStrings(sentence.getNer_tags()),
                     Utils.formatIntergers(sentence.getDoc_offsets()),
                     Utils.formatStrings(sentence.getDep_types()),
-                    Utils.formatIntergers(sentence.getDep_tokens())
+                    Utils.formatIntergers(sentence.getDep_tokens()),
+                    sentence.getSentiment()
             );
         }
         csvPrinter.flush();
