@@ -6,6 +6,7 @@ The file is placed at the root of the project.
 ### 2. run
 ```bash
 # java version 8+
+# maven version 3.8.2
 mvn clean
 mvn install
 mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
