@@ -19,7 +19,7 @@ public class TsvParser {
         return res;
     }
 
-    public static void saveToTsv(ArrayList<Sentence> sentences, String path) throws IOException {
+    public synchronized static void saveToTsv(ArrayList<Sentence> sentences, String path) throws IOException {
         CSVFormat.Builder builder = CSVFormat.Builder.create();
         builder.setDelimiter('\t').setAutoFlush(true).setAllowMissingColumnNames(false);
         builder.setQuote(null);

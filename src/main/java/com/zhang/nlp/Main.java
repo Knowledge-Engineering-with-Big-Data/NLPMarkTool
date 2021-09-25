@@ -4,10 +4,13 @@ package com.zhang.nlp;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
@@ -21,12 +24,28 @@ public class Main {
         // build pipeline
         DocunmentParse docunmentParse = new DocunmentParse(props);
         ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
-        int taskDoneNum = 0;
+        ExecutorService executorService = Executors.newCachedThreadPool();
         for(List<String> article:articles){
-            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
-            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
-            taskDoneNum++;
-            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
+//            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
+//            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
+//            taskDoneNum++;
+//            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
+            executorService.execute(()->{
+                String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
+                System.out.println(threadInfo + "start !");
+                ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
+
+                try {
+                    TsvParser.saveToTsv(parseResults,"./sentences.tsv");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
+
+            });
+        }
+        while (!executorService.isTerminated()){
+            Thread.sleep(10000);
         }
         System.out.println("SUCCESS!!!");
     }
