@@ -21,8 +21,7 @@ public class Main {
         props.setProperty("sentiment.model", "edu/stanford/nlp/models/sentiment/sentiment.ser.gz");
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
-        // build pipeline
-        DocunmentParse docunmentParse = new DocunmentParse(props);
+
         ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
         ExecutorService executorService = Executors.newCachedThreadPool();
         for(List<String> article:articles){
@@ -33,6 +32,8 @@ public class Main {
             executorService.execute(()->{
                 String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
                 System.out.println(threadInfo + "start !");
+                // build pipeline
+                DocunmentParse docunmentParse = new DocunmentParse(props);
                 ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
 
                 try {
