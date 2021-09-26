@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
@@ -18,12 +17,14 @@ public class Main {
         props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words-distsim.tagger");
         props.setProperty("ner.model", "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
         props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
+        props.setProperty("depparse.model", "edu/stanford/nlp/models/parser/nndep/english_UD.gz");
+        props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
         props.setProperty("sentiment.model", "edu/stanford/nlp/models/sentiment/sentiment.ser.gz");
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
 
         ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
         for(List<String> article:articles){
 //            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
 //            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
@@ -42,12 +43,14 @@ public class Main {
                     e.printStackTrace();
                 }
                 System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
-
             });
         }
-        while (!executorService.isTerminated()){
-            Thread.sleep(10000);
+        executorService.shutdown();
+        while (true){
+            if(executorService.isTerminated()){
+                System.out.println("SUCCESS!");
+                break;
+            }
         }
-        System.out.println("SUCCESS!!!");
     }
 }
