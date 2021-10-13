@@ -24,6 +24,5 @@ A sentences.tsv file with ten columns per row.
 - doc_offsets    int[]
 - dep_types      text[]
 - dep_tokens     int[]
-- sentiment      text
 ```
 
