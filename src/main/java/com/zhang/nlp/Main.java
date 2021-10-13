@@ -13,13 +13,10 @@ public class Main {
         // set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
-        props.setProperty("annotators", "tokenize,cleanxml,ssplit,pos,lemma,ner,depparse,parse,sentiment");
+        props.setProperty("annotators", "tokenize,cleanxml,ssplit,pos,lemma,ner,depparse,parse");
         props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words-distsim.tagger");
         props.setProperty("ner.model", "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-        props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
         props.setProperty("depparse.model", "edu/stanford/nlp/models/parser/nndep/english_UD.gz");
-        props.setProperty("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-        props.setProperty("sentiment.model", "edu/stanford/nlp/models/sentiment/sentiment.ser.gz");
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
 
@@ -32,7 +29,6 @@ public class Main {
 //            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
             executorService.execute(()->{
                 String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
-                System.out.println(threadInfo + "start !");
                 // build pipeline
                 DocunmentParse docunmentParse = new DocunmentParse(props);
                 ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
@@ -40,6 +36,7 @@ public class Main {
                 try {
                     TsvParser.saveToTsv(parseResults,"./sentences.tsv");
                 } catch (IOException e) {
+                    System.out.println("[ERROR] "+article.get(0) + " 失败！");
                     e.printStackTrace();
                 }
                 System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
