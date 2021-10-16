@@ -1,7 +1,6 @@
 package com.zhang.nlp;
 
 
-
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -9,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException{
         // set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
@@ -22,28 +21,28 @@ public class Main {
 
         ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
         ExecutorService executorService = Executors.newFixedThreadPool(20);
-        for(List<String> article:articles){
+        for (List<String> article : articles) {
 //            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
 //            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
 //            taskDoneNum++;
 //            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
-            executorService.execute(()->{
+            executorService.execute(() -> {
                 String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
                 try {
                     // build pipeline
                     DocunmentParse docunmentParse = new DocunmentParse(props);
                     ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
-                    TsvParser.saveToTsv(parseResults,"./sentences.tsv");
-                    System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
-                } catch (IOException e) {
-                    System.out.println("[ERROR] "+article.get(0) + " 失败！");
+                    TsvParser.saveToTsv(parseResults, "./sentences.tsv");
+                    System.out.println(threadInfo + " [INFO] " + article.get(0) + " 文献标记完成！");
+                } catch (Exception e) {
+                    System.out.println("[ERROR] " + article.get(0) + " 失败！");
                     e.printStackTrace();
                 }
             });
         }
         executorService.shutdown();
-        while (true){
-            if(executorService.isTerminated()){
+        while (true) {
+            if (executorService.isTerminated()) {
                 System.out.println("SUCCESS!");
                 break;
             }
