@@ -29,17 +29,16 @@ public class Main {
 //            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
             executorService.execute(()->{
                 String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
-                // build pipeline
-                DocunmentParse docunmentParse = new DocunmentParse(props);
-                ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
-
                 try {
+                    // build pipeline
+                    DocunmentParse docunmentParse = new DocunmentParse(props);
+                    ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
                     TsvParser.saveToTsv(parseResults,"./sentences.tsv");
+                    System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
                 } catch (IOException e) {
                     System.out.println("[ERROR] "+article.get(0) + " 失败！");
                     e.printStackTrace();
                 }
-                System.out.println(threadInfo + " [INFO] "+article.get(0)+" 文献标记完成！");
             });
         }
         executorService.shutdown();
