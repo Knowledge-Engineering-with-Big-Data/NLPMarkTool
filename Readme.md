@@ -25,6 +25,3 @@ A sentences.tsv file with ten columns per row.
 - dep_types      text[]
 - dep_tokens     int[]
 ```
-### Supplementary
-- The default number of multi-threads is 20, do not change this setting or you will be prone to the OutofMemary error.
-- The number of articles to be processed at one time should not exceed 2,500. If there are more articles, you can split them into multiple parts and open multiple processes to process them separately.
