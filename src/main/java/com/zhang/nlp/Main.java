@@ -2,6 +2,7 @@ package com.zhang.nlp;
 
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,27 +20,36 @@ public class Main {
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
 
-        ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
         ExecutorService executorService = Executors.newFixedThreadPool(2);
-        for (List<String> article : articles) {
+
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            System.out.println("[INFO] Line: " + line);
+            StringReader reader = new StringReader(line);
+            ArrayList<List<String>> articles = TsvParser.getTsv(reader);
+            for (List<String> article : articles) {
 //            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
 //            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
 //            taskDoneNum++;
 //            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
-            executorService.execute(() -> {
-                String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
-                try {
-                    // build pipeline
-                    DocunmentParse docunmentParse = new DocunmentParse(props);
-                    ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
-                    TsvParser.saveToTsv(parseResults, "./sentences.tsv");
-                    System.out.println(threadInfo + " [INFO] " + article.get(0) + " 文献标记完成！");
-                } catch (Exception e) {
-                    System.out.println("[ERROR] " + article.get(0) + " 失败！");
-                    e.printStackTrace();
-                }
-            });
+                executorService.execute(() -> {
+                    String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
+                    try {
+                        // build pipeline
+                        DocunmentParse docunmentParse = new DocunmentParse(props);
+                        ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
+                        TsvParser.saveToTsv(parseResults, "./sentences.tsv");
+                        System.out.println(threadInfo + " [INFO] " + article.get(0) + " 文献标记完成！");
+                    } catch (Exception e) {
+                        System.out.println("[ERROR] " + article.get(0) + " 失败！");
+                        e.printStackTrace();
+                    }
+                });
+            }
+
         }
+
         executorService.shutdown();
         while (true) {
             if (executorService.isTerminated()) {

@@ -8,11 +8,10 @@ import java.util.List;
 
 public class TsvParser {
 
-    public static ArrayList<List<String>> getTsv(String path) throws IOException {
-        Reader in = new FileReader(path);
+    public static ArrayList<List<String>> getTsv(Reader line) throws IOException {
         CSVFormat format = CSVFormat.newFormat('\t');
         ArrayList<List<String>> res = new ArrayList<>();
-        CSVParser parser = CSVParser.parse(in, format);
+        CSVParser parser = CSVParser.parse(line, format);
         for (CSVRecord record : parser) {
             res.add(record.toList());
         }

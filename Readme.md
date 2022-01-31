@@ -9,7 +9,7 @@ The file is placed at the root of the project.
 # maven version 3.8.2
 mvn clean
 mvn install
-mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
+cat articles.tsv | mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
 ```
 ### 3.output file
 A sentences.tsv file with ten columns per row.
