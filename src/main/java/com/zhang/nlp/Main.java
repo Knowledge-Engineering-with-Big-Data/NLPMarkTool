@@ -25,7 +25,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
-            System.out.println("[INFO] Line: " + line);
             StringReader reader = new StringReader(line);
             ArrayList<List<String>> articles = TsvParser.getTsv(reader);
             for (List<String> article : articles) {
