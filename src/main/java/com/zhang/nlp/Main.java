@@ -4,8 +4,7 @@ package com.zhang.nlp;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Main {
 
@@ -20,7 +19,9 @@ public class Main {
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512));
+//        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        // build pipeline
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()){
@@ -32,7 +33,7 @@ public class Main {
 //            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
 //            taskDoneNum++;
 //            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
-                executorService.execute(() -> {
+                threadPoolExecutor.execute(() -> {
                     String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
                     try {
                         // build pipeline
@@ -49,9 +50,9 @@ public class Main {
 
         }
 
-        executorService.shutdown();
+        threadPoolExecutor.shutdown();
         while (true) {
-            if (executorService.isTerminated()) {
+            if (threadPoolExecutor.isTerminated()) {
                 System.out.println("SUCCESS!");
                 break;
             }
