@@ -22,7 +22,7 @@ public class Main {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512));
 //        ExecutorService executorService = Executors.newFixedThreadPool(2);
         // build pipeline
-
+        DocunmentParse docunmentParse = new DocunmentParse(props);
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
@@ -36,8 +36,6 @@ public class Main {
                 threadPoolExecutor.execute(() -> {
                     String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
                     try {
-                        // build pipeline
-                        DocunmentParse docunmentParse = new DocunmentParse(props);
                         ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
                         TsvParser.saveToTsv(parseResults, "./sentences.tsv");
                         System.out.println(threadInfo + " [INFO] " + article.get(0) + " 文献标记完成！");
