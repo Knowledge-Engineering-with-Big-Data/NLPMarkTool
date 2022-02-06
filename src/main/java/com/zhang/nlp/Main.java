@@ -19,7 +19,7 @@ public class Main {
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
 
         ArrayList<List<String>> articles = TsvParser.getTsv("./articles.tsv");
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512));
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512),new ThreadPoolExecutor.CallerRunsPolicy());
 //        ExecutorService executorService = Executors.newFixedThreadPool(2);
         // build pipeline
         DocunmentParse docunmentParse = new DocunmentParse(props);
