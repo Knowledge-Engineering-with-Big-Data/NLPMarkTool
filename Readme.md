@@ -13,7 +13,7 @@ mvn install
 mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
 ```
 #### 2.2 run with jar
-get release jar package, then 
+Get the corresponding version of the JAR package, then 
 ```shell
 java -jar xxx.jar
 ```
