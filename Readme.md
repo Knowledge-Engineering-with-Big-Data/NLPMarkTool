@@ -4,12 +4,18 @@
 The input file is articles.tsv, contains two columns of docid and content, and the file does not require a header.
 The file is placed at the root of the project.
 ### 2. run
+#### 2.1 run with maven
 ```bash
 # java version 8+
 # maven version 3.8.2
 mvn clean
 mvn install
 mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
+```
+#### 2.2 run with jar
+get release jar package, then 
+```shell
+java -jar xxx.jar
 ```
 ### 3.output file
 A sentences.tsv file with ten columns per row.
