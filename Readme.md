@@ -12,11 +12,7 @@ mvn clean
 mvn install
 mvn exec:java -Dexec.mainClass="com.zhang.nlp.Main"
 ```
-#### 2.2 run with jar
-Get the corresponding version of the JAR package, then 
-```shell
-java -jar xxx.jar
-```
+
 ### 3.output file
 A sentences.tsv file with ten columns per row.
 ```
