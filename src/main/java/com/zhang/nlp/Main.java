@@ -18,9 +18,9 @@ public class Main {
         props.setProperty("depparse.model", "edu/stanford/nlp/models/parser/nndep/english_UD.gz");
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
+        props.setProperty("threads","64");
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512),new ThreadPoolExecutor.CallerRunsPolicy());
-//        ExecutorService executorService = Executors.newFixedThreadPool(2);
         // build pipeline
         DocunmentParse docunmentParse = new DocunmentParse(props);
         Scanner scanner = new Scanner(System.in);
@@ -29,10 +29,6 @@ public class Main {
             StringReader reader = new StringReader(line);
             ArrayList<List<String>> articles = TsvParser.getTsv(reader);
             for (List<String> article : articles) {
-//            ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
-//            TsvParser.saveToTsv(parseResults,"./sentences.tsv");
-//            taskDoneNum++;
-//            System.out.println("[INFO] 第 "+Integer.toString(taskDoneNum)+" 篇文献标记完成！");
                 threadPoolExecutor.execute(() -> {
                     String threadInfo = "[ Thread : " + Thread.currentThread().getId() + " ]";
                     try {
