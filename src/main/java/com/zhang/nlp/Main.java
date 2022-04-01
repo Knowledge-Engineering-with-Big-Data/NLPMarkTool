@@ -20,7 +20,7 @@ public class Main {
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
         props.setProperty("threads","64");
 
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(6, 8, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512),new ThreadPoolExecutor.CallerRunsPolicy());
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(40, 50, 0,TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(512),new ThreadPoolExecutor.CallerRunsPolicy());
         // build pipeline
         DocunmentParse docunmentParse = new DocunmentParse(props);
         Scanner scanner = new Scanner(System.in);
