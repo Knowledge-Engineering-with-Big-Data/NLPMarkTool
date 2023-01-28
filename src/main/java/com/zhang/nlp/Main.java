@@ -17,23 +17,21 @@ public class Main {
 
     public static Logger logger = Logger.getLogger(Main.class);
     public static void main(String[] args) throws IOException{
-        // set up pipeline properties
         Properties props = new Properties();
-        // set the list of annotators to run
         props.setProperty("annotators", "tokenize,cleanxml,ssplit,pos,lemma,ner,depparse,parse");
         props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words-distsim.tagger");
-//        props.setProperty("ner.model", "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
+        props.setProperty("ner.model", "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
         props.setProperty("depparse.model", "edu/stanford/nlp/models/parser/nndep/english_UD.gz");
         props.setProperty("parse.maxlen", "100");
         props.setProperty("ssplit.boundaryTokenRegex", "[.]|[!?]+|[。]|[！？]+");
         props.setProperty("threads","64");
+        DocunmentParse docunmentParse = new DocunmentParse(props);
 
         LineIterator iterator = FileUtils.lineIterator(new File("./articles.tsv"), "UTF-8");
         while (iterator.hasNext()){
             String line = iterator.nextLine();
             StringReader reader = new StringReader(line);
             ArrayList<List<String>> articles = TsvParser.getTsv(reader);
-            DocunmentParse docunmentParse = new DocunmentParse(props);
             for (List<String> article : articles) {
                 ArrayList<Sentence> parseResults = docunmentParse.getParseResults(article.get(0), Utils.cleanTxt(article.get(1)));
                 TsvParser.saveToTsv(parseResults, "./sentences.tsv");
